@@ -1,0 +1,72 @@
+<?php
+
+namespace InovantiBank\Toolkit\Helpers;
+
+class StringHelper
+{
+    protected array $lowercaseWords = [
+        'da', 'de', 'do', 'dos', 'das', 'e', 'a', 'ao',
+    ];
+
+    protected array $uppercaseWords = [
+        'S.A.', 'S.A', 'SA', 'LTDA', 'LTDA.', 'MEI', 'ME', 'EIRELI', 'FIDC',
+    ];
+
+    public function formatName(string $name, bool $abbreviate = false, bool $firstAndLast = false): string
+    {
+        $nameParts = explode(' ', mb_strtolower(trim($name), 'UTF-8'));
+        $formattedName = [];
+
+        foreach ($nameParts as $index => $part) {
+            if (in_array($part, $this->lowercaseWords, true)) {
+                $formattedName[] = $part;
+            } elseif (in_array(strtoupper($part), $this->uppercaseWords, true)) {
+                $formattedName[] = strtoupper($part);
+            } else {
+                $formattedName[] = mb_convert_case($part, MB_CASE_TITLE, 'UTF-8');
+            }
+        }
+
+        if ($abbreviate) {
+            foreach ($formattedName as $key => $word) {
+                if (! in_array($word, $this->lowercaseWords, true) && ! in_array($word, $this->uppercaseWords, true)) {
+                    if ($key !== 0 && $key !== array_key_last($formattedName)) {
+                        $formattedName[$key] = mb_substr($word, 0, 1, 'UTF-8').'.';
+                    }
+                }
+            }
+        }
+
+        if ($firstAndLast) {
+            return reset($formattedName).' '.end($formattedName);
+        }
+
+        return implode(' ', $formattedName);
+    }
+
+    public function limitString(string $text, int $limit, string $suffix = '...'): string
+    {
+        if (mb_strlen($text, 'UTF-8') > $limit) {
+            return mb_substr($text, 0, $limit, 'UTF-8').$suffix;
+        }
+
+        return $text;
+    }
+
+    public function removeAccents(string $text): string
+    {
+        return iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+    }
+
+    public function onlyNumbers(string $text): string
+    {
+        return preg_replace('/\D/', '', $text);
+    }
+
+    public function isPalindrome(string $text): bool
+    {
+        $cleanedText = preg_replace('/[^a-zA-Z0-9]/', '', mb_strtolower($text, 'UTF-8'));
+
+        return $cleanedText === strrev($cleanedText);
+    }
+}
