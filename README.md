@@ -11,23 +11,6 @@ O **Inovanti Toolkit** é um componente projetado para **simplificar tarefas com
 
 ---
 
-# 📌 Índice
-
-1. [🚀 Instalação](#instalação)
-2. [⚙️ Configuração](#configuração)
-3. [📩 Uso](#uso)
-   - [Manipulação de Strings](#manipulacao-de-strings)
-   - [Manipulação de Números](#manipulacao-de-numeros)
-   - [Manipulação de Datas](#manipulacao-de-datas)
-   - [Formatação de Dados](#formatacao-de-dados)
-   - [Validação de Documentos](#validacao-de-documentos)
-   - [Conversão de Unidades](#conversao-de-unidades)
-4. [🧪 Testes](#testes)
-5. [🤝 Contribuindo](#contribuindo)
-6. [📜 Licença](#licença)
-
----
-
 # 🚀 Instalação
 
 O pacote pode ser instalado via Composer:
