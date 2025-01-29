@@ -53,6 +53,7 @@ Atualmente, não há configuração obrigatória. No entanto, o pacote se integr
 - `removeAccents(string $text): string`
 - `onlyNumbers(string $text): string`
 - `isPalindrome(string $text): bool`
+- `generatePassword(int $minLength = 8, int $maxLength = 32, bool $useUppercase = true, bool $useLowercase = true, bool $useNumbers = true, bool $useSpecialChars = true, bool $exactMaxSize = false, string $specialCharactersNotAllowed = '()-_+=<>'): string`
 
 ### ✅ Exemplo de Uso
 
