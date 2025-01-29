@@ -3,6 +3,7 @@
 namespace InovantiBank\Toolkit\Helpers;
 
 use Carbon\Carbon;
+use InovantiBank\Toolkit\Enums\StateEnum;
 use InovantiBank\Toolkit\Exceptions\InvalidFormatException;
 
 class ValidatorHelper
@@ -192,5 +193,50 @@ class ValidatorHelper
         $digitoCalculado = ($resto == 10 || $resto == 11) ? 0 : (11 - $resto);
 
         return $digitoCalculado === $digitoVerificador;
+    }
+
+    public function isValidCNH(string $cnh): bool
+    {
+        $cnh = $this->strHelper->onlyNumbers($cnh);
+
+        if (strlen($cnh) != 11 || preg_match('/(\d)\1{10}/', $cnh)) {
+            return false;
+        }
+
+        $dsc = 0;
+        for ($i = 0, $j = 9; $i < 9; $i++, $j--) {
+            $dsc += $cnh[$i] * $j;
+        }
+
+        $dv1 = $dsc % 11;
+        $dv1 = ($dv1 > 9) ? 0 : $dv1;
+
+        if ($cnh[9] != $dv1) {
+            return false;
+        }
+
+        $dsc = 0;
+        for ($i = 0, $j = 1; $i < 9; $i++, $j++) {
+            $dsc += $cnh[$i] * $j;
+        }
+
+        $dv2 = $dsc % 11;
+        $dv2 = ($dv2 > 9) ? 0 : $dv2;
+
+        return $cnh[10] == $dv2;
+    }
+
+    /**
+     * Valida a Inscrição Estadual de um estado específico.
+     *
+     * @param  StateEnum  $state  Estado da IE
+     * @param  string  $number  Número da Inscrição Estadual
+     * @return bool Retorna verdadeiro se for válida, falso caso contrário
+     */
+    public function isValidIE(StateEnum $state, string $number): bool
+    {
+        $number = $this->strHelper->onlyNumbers($number);
+
+        return strlen($number) === $state->getIEDigitLength();
     }
 }
