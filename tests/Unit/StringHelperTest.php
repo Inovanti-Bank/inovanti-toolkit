@@ -70,7 +70,7 @@ class StringHelperTest extends TestCase
         $password = $this->stringHelper->generatePassword(12, 20, true, false, false, true, false, '');
         $this->assertMatchesRegularExpression('/^[A-Z!@#$%^&*()-_+=<>?]+$/', $password);
         $this->assertMatchesRegularExpression('/[A-Z]/', $password);
-        $this->assertMatchesRegularExpression('/[!@#$%^&*]/', $password);
+        $this->assertMatchesRegularExpression('/[!@#$%^&*()-_+=<>?]/', $password);
 
         // Testa a geração com tamanho máximo fixo
         $password = $this->stringHelper->generatePassword(8, 32, true, true, true, true, true);
