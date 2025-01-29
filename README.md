@@ -11,23 +11,6 @@ O **Inovanti Toolkit** é um componente projetado para **simplificar tarefas com
 
 ---
 
-# 📌 Índice
-
-1. [🚀 Instalação](#instalação)
-2. [⚙️ Configuração](#configuração)
-3. [📩 Uso](#uso)
-   - [Manipulação de Strings](#manipulacao-de-strings)
-   - [Manipulação de Números](#manipulacao-de-numeros)
-   - [Manipulação de Datas](#manipulacao-de-datas)
-   - [Formatação de Dados](#formatacao-de-dados)
-   - [Validação de Documentos](#validacao-de-documentos)
-   - [Conversão de Unidades](#conversao-de-unidades)
-4. [🧪 Testes](#testes)
-5. [🤝 Contribuindo](#contribuindo)
-6. [📜 Licença](#licença)
-
----
-
 # 🚀 Instalação
 
 O pacote pode ser instalado via Composer:
@@ -53,6 +36,7 @@ Atualmente, não há configuração obrigatória. No entanto, o pacote se integr
 - `removeAccents(string $text): string`
 - `onlyNumbers(string $text): string`
 - `isPalindrome(string $text): bool`
+- `generatePassword(int $minLength = 8, int $maxLength = 32, bool $useUppercase = true, bool $useLowercase = true, bool $useNumbers = true, bool $useSpecialChars = true, bool $exactMaxSize = false, string $specialCharactersNotAllowed = '()-_+=<>'): string`
 
 ### ✅ Exemplo de Uso
 
@@ -167,6 +151,33 @@ $converter = new UnitConverter();
 
 echo $converter->bytesToHumanReadable(1048576);
 // Saída: "1.00 MB"
+```
+
+# 🧮 Enums Disponíveis
+
+## 📌 CreditCardTypeEnum
+
+Enum responsável por armazenar as bandeiras de cartões e seus formatos:
+
+```php
+use InovantiBank\Toolkit\Enums\CreditCardTypeEnum;
+
+echo CreditCardTypeEnum::VISA->getMask();
+// Saída: #### #### #### ####
+```
+
+## 📌 StateEnum
+
+Enum que representa os 27 estados brasileiros, armazenando a máscara e a quantidade de dígitos esperados da Inscrição Estadual.
+
+```php
+use InovantiBank\Toolkit\Enums\StateEnum;
+
+echo StateEnum::SP->getIEMask();
+// Saída: ###.###.###.###
+
+echo StateEnum::RJ->getIEDigitLength();
+// Saída: 8
 ```
 
 # 🧪 Testes

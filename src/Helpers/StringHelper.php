@@ -2,6 +2,8 @@
 
 namespace InovantiBank\Toolkit\Helpers;
 
+use InvalidArgumentException;
+
 class StringHelper
 {
     protected array $lowercaseWords = [
@@ -68,5 +70,58 @@ class StringHelper
         $cleanedText = preg_replace('/[^a-zA-Z0-9]/', '', mb_strtolower($text, 'UTF-8'));
 
         return $cleanedText === strrev($cleanedText);
+    }
+
+    public function generatePassword(
+        int $minLength = 8,
+        int $maxLength = 32,
+        bool $useUppercase = true,
+        bool $useLowercase = true,
+        bool $useNumbers = true,
+        bool $useSpecialChars = true,
+        bool $exactMaxSize = false,
+        string $specialCharactersNotAllowed = '()-_+=<>'
+    ): string {
+        $minLength = max(8, $minLength);
+        $maxLength = min(32, $maxLength);
+
+        if (! $useUppercase && ! $useLowercase && ! $useNumbers && ! $useSpecialChars) {
+            throw new InvalidArgumentException('Ao menos um tipo de caractere deve ser permitido.');
+        }
+
+        $charSets = [
+            'uppercase' => $useUppercase ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '',
+            'lowercase' => $useLowercase ? 'abcdefghijklmnopqrstuvwxyz' : '',
+            'numbers' => $useNumbers ? '0123456789' : '',
+            'special' => $useSpecialChars ? '!@#$%^&*()-_+=<>?' : '',
+        ];
+
+        foreach ($charSets as $key => $chars) {
+            if ($chars && $useSpecialChars) {
+                $charSets[$key] = str_replace(str_split($specialCharactersNotAllowed), '', $chars);
+            }
+        }
+
+        $availableChars = implode('', $charSets);
+        if (empty($availableChars)) {
+            throw new InvalidArgumentException('Após a exclusão, é necessário permitir pelo menos um tipo de caractere.');
+        }
+
+        $length = $exactMaxSize ? $maxLength : random_int($minLength, $maxLength);
+        $password = [];
+
+        foreach ($charSets as $chars) {
+            if ($chars) {
+                $password[] = $chars[random_int(0, strlen($chars) - 1)];
+            }
+        }
+
+        while (count($password) < $length) {
+            $password[] = $availableChars[random_int(0, strlen($availableChars) - 1)];
+        }
+
+        shuffle($password);
+
+        return implode('', $password);
     }
 }

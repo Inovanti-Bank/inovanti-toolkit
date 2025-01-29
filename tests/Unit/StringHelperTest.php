@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use InovantiBank\Toolkit\Helpers\StringHelper;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class StringHelperTest extends TestCase
@@ -56,5 +57,42 @@ class StringHelperTest extends TestCase
         $this->assertTrue($this->stringHelper->isPalindrome('Ana'));
         $this->assertTrue($this->stringHelper->isPalindrome('A base do teto desaba'));
         $this->assertFalse($this->stringHelper->isPalindrome('Olá Mundo'));
+    }
+
+    public function test_generate_password()
+    {
+        // Gera uma senha padrão e verifica o tamanho
+        $password = $this->stringHelper->generatePassword();
+        $this->assertGreaterThanOrEqual(8, strlen($password));
+        $this->assertLessThanOrEqual(32, strlen($password));
+
+        // Testa a geração com apenas letras maiúsculas e caracteres especiais
+        $password = $this->stringHelper->generatePassword(12, 20, true, false, false, true, false, '');
+        $this->assertMatchesRegularExpression('/^[A-Z!@#$%^&*()-_+=<>?]+$/', $password);
+        $this->assertMatchesRegularExpression('/[A-Z]/', $password);
+        $this->assertMatchesRegularExpression('/[!@#$%^&*()-_+=<>?]/', $password);
+
+        // Testa a geração com tamanho máximo fixo
+        $password = $this->stringHelper->generatePassword(8, 32, true, true, true, true, true);
+        $this->assertSame(32, strlen($password));
+
+        // Testa senha sem letras e caracteres especiais específicos
+        $password = $this->stringHelper->generatePassword(12, 20, false, false, true, true, false, '()-_+=<>');
+        $this->assertMatchesRegularExpression('/^[0-9!@#$%^&*?]+$/', $password);
+        $this->assertMatchesRegularExpression('/[0-9]/', $password);
+        $this->assertMatchesRegularExpression('/[!@#$%^&*]/', $password);
+
+        // Testa senha contendo apenas números
+        $password = $this->stringHelper->generatePassword(10, 10, false, false, true, false);
+        $this->assertMatchesRegularExpression('/^[0-9]+$/', $password);
+
+        // Testa se caracteres proibidos estão sendo removidos
+        $password = $this->stringHelper->generatePassword(15, 15, true, true, true, true, false, '()');
+        $this->assertStringNotContainsString('(', $password);
+        $this->assertStringNotContainsString(')', $password);
+
+        // Testa a exceção ao não permitir nenhum tipo de caractere
+        $this->expectException(InvalidArgumentException::class);
+        $this->stringHelper->generatePassword(10, 10, false, false, false, false);
     }
 }
