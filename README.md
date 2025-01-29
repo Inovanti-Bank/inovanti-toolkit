@@ -153,6 +153,33 @@ echo $converter->bytesToHumanReadable(1048576);
 // Saída: "1.00 MB"
 ```
 
+# 🧮 Enums Disponíveis
+
+## 📌 CreditCardTypeEnum
+
+Enum responsável por armazenar as bandeiras de cartões e seus formatos:
+
+```php
+use InovantiBank\Toolkit\Enums\CreditCardTypeEnum;
+
+echo CreditCardTypeEnum::VISA->getMask();
+// Saída: #### #### #### ####
+```
+
+## 📌 StateEnum
+
+Enum que representa os 27 estados brasileiros, armazenando a máscara e a quantidade de dígitos esperados da Inscrição Estadual.
+
+```php
+use InovantiBank\Toolkit\Enums\StateEnum;
+
+echo StateEnum::SP->getIEMask();
+// Saída: ###.###.###.###
+
+echo StateEnum::RJ->getIEDigitLength();
+// Saída: 8
+```
+
 # 🧪 Testes
 
 O pacote inclui testes unitários para garantir que todas as funcionalidades funcionem conforme o esperado.
