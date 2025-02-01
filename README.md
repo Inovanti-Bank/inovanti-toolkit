@@ -98,6 +98,9 @@ echo $dateHelper->formatDate('2025-01-28');
 - `formatDateRelative(string $date): string`
 - `formatDateWeekday(string $date): string`
 - `formatDateCustom(string $date, string $format): string`
+- `formatPhone(string $number, bool $withCountryCode = false): string`
+- `formatCreditCard(string $number, ?CreditCardTypeEnum $cardType = null): string`
+- `formatIE(string $number, StateEnum $state): string`
 
 ### ✅ Exemplo de Uso
 
@@ -124,6 +127,7 @@ echo $formatter->formatDateRelative('2025-01-28 14:01:23');
 - `isValidDate(string $date, string $format = 'Y-m-d'): bool`
 - `isValidCEP(string $cep): bool`
 - `isValidCreditCard(string $number): bool`
+- `isValidIE(tateEnum $state, string $number): bool`
 
 ### ✅ Exemplo de Uso
 

@@ -30,80 +30,77 @@ enum StateEnum: string
     case SC = 'Santa Catarina';
     case SP = 'São Paulo';
     case SE = 'Sergipe';
-    case TO9 = 'Tocantins9';
-    case TO11 = 'Tocantins11';
+    case TO = 'Tocantins';
 
     /**
      * Retorna a máscara padrão da Inscrição Estadual para cada estado.
      */
-    public function getIEMask(): string
+    public function getIEMask(): array
     {
         return match ($this) {
-            self::AC => '##.####.#####-##',
-            self::AL => '#########',
-            self::AP => '#########',
-            self::AM => '##.###.###-#',
-            self::BA => '#######-##',
-            self::CE => '########-#',
-            self::DF => '###########-##',
-            self::ES => '#########',
-            self::GO => '##.###.###-#',
-            self::MA => '#########',
-            self::MT => '##########-#',
-            self::MS => '#########',
-            self::MG => '###.###.###/####',
-            self::PA => '#########',
-            self::PB => '########-#',
-            self::PR => '#########-##',
-            self::PE => '#########-##',
-            self::PI => '#########',
-            self::RJ => '##.###.##-#',
-            self::RN => '##.###.###-#',
-            self::RS => '###/#######',
-            self::RO => '############-#',
-            self::RR => '#########',
-            self::SC => '###.###.###',
-            self::SP => '###.###.###.###',
-            self::SE => '#########-#',
-            self::TO9 => '#########',
-            self::TO11 => '###########',
+            self::AC => ['##.###.###/###-##'],
+            self::AL => ['#########'],
+            self::AP => ['#########'],
+            self::AM => ['##.###.###-#'],
+            self::BA => ['#######-##'],
+            self::CE => ['########-#'],
+            self::DF => ['###########-##'],
+            self::ES => ['########-#'],
+            self::GO => ['##.###.###-#'],
+            self::MA => ['########-#'],
+            self::MT => ['##########-#'],
+            self::MS => ['########-#'],
+            self::MG => ['###.###.###/####'],
+            self::PA => ['##-######-#'],
+            self::PB => ['########-#'],
+            self::PR => ['#########-##'],
+            self::PE => ['#########-##'],
+            self::PI => ['#########'],
+            self::RJ => ['##.###.##-#'],
+            self::RN => ['##.###.###-#'],
+            self::RS => ['###/#######'],
+            self::RO => ['############-#'],
+            self::RR => ['#########'],
+            self::SC => ['###.###.###'],
+            self::SP => ['###.###.###.###'],
+            self::SE => ['#########-#'],
+            self::TO => ['########-#', '##########-#'],
         };
     }
 
     /**
      * Retorna a quantidade de dígitos esperados para a Inscrição Estadual de cada estado.
      */
-    public function getIEDigitLength(): int
+    public function getIEDigitLength(): array
     {
         return match ($this) {
-            self::AC => 13,
-            self::AL => 9,
-            self::AP => 9,
-            self::AM => 9,
-            self::BA => 9,
-            self::CE => 9,
-            self::DF => 13,
-            self::ES => 9,
-            self::GO => 9,
-            self::MA => 9,
-            self::MT => 11,
-            self::MS => 9,
-            self::MG => 13,
-            self::PA => 9,
-            self::PB => 9,
-            self::PR => 10,
-            self::PE => 9,
-            self::PI => 9,
-            self::RJ => 8,
-            self::RN => 9,
-            self::RS => 10,
-            self::RO => 14,
-            self::RR => 9,
-            self::SC => 9,
-            self::SP => 12,
-            self::SE => 9,
-            self::TO9 => 9,
-            self::TO11 => 11,
+            self::AC => [13],
+            self::AL => [9],
+            self::AP => [9],
+            self::AM => [9],
+            self::BA => [9],
+            self::CE => [9],
+            self::DF => [13],
+            self::ES => [9],
+            self::GO => [9],
+            self::MA => [9],
+            self::MT => [11],
+            self::MS => [9],
+            self::MG => [13],
+            self::PA => [9],
+            self::PB => [9],
+            self::PR => [10],
+            self::PE => [9],
+            self::PI => [9],
+            self::RJ => [8],
+            self::RN => [9],
+            self::RS => [10],
+            self::RO => [14],
+            self::RR => [9],
+            self::SC => [9],
+            self::SP => [12],
+            self::SE => [9],
+            self::TO => [9, 11],
         };
     }
 }

@@ -3,9 +3,11 @@
 namespace Tests\Unit;
 
 use Carbon\Carbon;
+use InovantiBank\Toolkit\Enums\StateEnum;
 use InovantiBank\Toolkit\Exceptions\InvalidFormatException;
 use InovantiBank\Toolkit\Helpers\FormatterHelper;
 use InovantiBank\Toolkit\Helpers\StringHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FormatterHelperTest extends TestCase
@@ -35,6 +37,12 @@ class FormatterHelperTest extends TestCase
         $this->assertSame('12.345.678/0001-90', $this->formatterHelper->formatCpfCnpj('12345678000190'));
         $this->assertSame('12.345.678/0001-90', $this->formatterHelper->formatCpfCnpj('12.345.678/0001-90'));
         $this->assertSame('98.765.432/0001-00', $this->formatterHelper->formatCpfCnpj('98765432000100'));
+    }
+
+    #[DataProvider('providerIEData')]
+    public function test_formats_ie_correctly(StateEnum $state, string $formattedIE, string $formatIE)
+    {
+        $this->assertSame($formattedIE, $this->formatterHelper->formatIE($formatIE, $state));
     }
 
     public function test_throws_exception_for_invalid_formats()
@@ -78,5 +86,39 @@ class FormatterHelperTest extends TestCase
     public function test_formats_custom_date()
     {
         $this->assertSame('28/01/2025 14:01', $this->formatterHelper->formatDateCustom('2025-01-28 14:01:23', 'd/m/Y H:i'));
+    }
+
+    public static function providerIEData(): array
+    {
+        return [
+            [StateEnum::AC, '01.908.446/863-89', '0190844686389'],
+            [StateEnum::AL, '248855409', '248855409'],
+            [StateEnum::AP, '032213824', '032213824'],
+            [StateEnum::AM, '56.540.195-5', '565401955'],
+            [StateEnum::BA, '3403415-64', '340341564'],
+            [StateEnum::CE, '73226834-6', '732268346'],
+            [StateEnum::DF, '07981464001-49', '0798146400149'],
+            [StateEnum::ES, '64010140-2', '640101402'],
+            [StateEnum::GO, '11.228.470-1', '112284701'],
+            [StateEnum::MA, '12916499-2', '129164992'],
+            [StateEnum::MT, '6406750953-0', '64067509530'],
+            [StateEnum::MS, '28177629-6', '281776296'],
+            [StateEnum::MG, '174.766.542/5830', '1747665425830'],
+            [StateEnum::PA, '15-769500-0', '157695000'],
+            [StateEnum::PB, '10356861-1', '103568611'],
+            [StateEnum::PR, '4508972569', '4508972569'],
+            [StateEnum::PE, '955832624', '955832624'],
+            [StateEnum::PI, '114514852', '114514852'],
+            [StateEnum::RJ, '05.343.78-0', '05343780'],
+            [StateEnum::RN, '20.120.137-2', '201201372'],
+            [StateEnum::RS, '654/5207761', '6545207761'],
+            [StateEnum::RO, '24091852784061', '24091852784061'],
+            [StateEnum::RR, '240945532', '240945532'],
+            [StateEnum::SC, '014.740.010', '014740010'],
+            [StateEnum::SP, '778.645.362.500', '778645362500'],
+            [StateEnum::SE, '706278062', '706278062'],
+            [StateEnum::TO, '95247853-6', '952478536'],
+            [StateEnum::TO, '9503247853-6', '95032478536'],
+        ];
     }
 }

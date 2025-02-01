@@ -153,18 +153,24 @@ class FormatterHelper
      * @param  string  $mask  Máscara desejada
      * @return string Número formatado
      */
-    private function applyMask(string $value, string $mask): string
+    private function applyMask(string $value, array $masks): string
     {
-        $masked = '';
-        $index = 0;
-        for ($i = 0; $i < strlen($mask); $i++) {
-            if ($mask[$i] === '#') {
-                $masked .= isset($value[$index]) ? $value[$index++] : '';
-            } else {
-                $masked .= $mask[$i];
+        foreach ($masks as $mask) {
+            if (strlen($value) === substr_count($mask, '#')) {
+                $masked = '';
+                $index = 0;
+                for ($i = 0; $i < strlen($mask); $i++) {
+                    if ($mask[$i] === '#') {
+                        $masked .= isset($value[$index]) ? $value[$index++] : '';
+                    } else {
+                        $masked .= $mask[$i];
+                    }
+                }
+
+                return $masked;
             }
         }
 
-        return $masked;
+        return $value;
     }
 }

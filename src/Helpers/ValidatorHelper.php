@@ -5,6 +5,7 @@ namespace InovantiBank\Toolkit\Helpers;
 use Carbon\Carbon;
 use InovantiBank\Toolkit\Enums\StateEnum;
 use InovantiBank\Toolkit\Exceptions\InvalidFormatException;
+use InovantiBank\Toolkit\Factories\ValidadorIE;
 
 class ValidatorHelper
 {
@@ -237,6 +238,6 @@ class ValidatorHelper
     {
         $number = $this->strHelper->onlyNumbers($number);
 
-        return strlen($number) === $state->getIEDigitLength();
+        return ValidadorIE::check($state, $number);
     }
 }
