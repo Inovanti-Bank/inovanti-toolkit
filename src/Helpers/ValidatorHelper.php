@@ -10,13 +10,15 @@ class ValidatorHelper
 {
     public function __construct(protected StringHelper $strHelper) {}
 
-    public function validateDocument(string $document): bool|string
+    public function validateDocument(string $document, bool $allowAlphanumericCnpj = true): bool|string
     {
-        $document = $this->strHelper->onlyNumbers($document);
+        $document = $allowAlphanumericCnpj 
+            ? $this->strHelper->onlyAlphanumeric($document, true) 
+            : $this->strHelper->onlyNumbers($document);
 
         return match (strlen($document)) {
             11 => $this->isValidCPF($document),
-            14 => $this->isValidCNPJ($document),
+            14 => $this->isValidCNPJ($document, $allowAlphanumericCnpj),
             default => throw new InvalidFormatException('Documento inválido. CPF deve ter 11 dígitos e CNPJ deve ter 14 dígitos.')
         };
     }
@@ -43,16 +45,23 @@ class ValidatorHelper
         return true;
     }
 
-    public function isValidCNPJ(string $cnpj): bool
+    public function isValidCNPJ(string $cnpj, bool $allowAlphanumeric = false): bool
     {
-        $cnpj = $this->strHelper->onlyNumbers($cnpj);
+        $cnpj = $allowAlphanumeric 
+            ? $this->strHelper->onlyAlphanumeric($cnpj, true) 
+            : $this->strHelper->onlyNumbers($cnpj);
 
-        if (preg_match('/(\d)\1{13}/', $cnpj)) {
+        if (strlen($cnpj) !== 14 || preg_match('/^(.)\1{13}$/', $cnpj)) {
+            return false;
+        }
+
+        if (!is_numeric(substr($cnpj, 12, 2))) {
             return false;
         }
 
         for ($i = 0, $j = 5, $sum = 0; $i < 12; $i++) {
-            $sum += $cnpj[$i] * $j;
+            $val = ord($cnpj[$i]) - 48; 
+            $sum += $val * $j;
             $j = ($j == 2) ? 9 : $j - 1;
         }
 
@@ -63,7 +72,8 @@ class ValidatorHelper
         }
 
         for ($i = 0, $j = 6, $sum = 0; $i < 13; $i++) {
-            $sum += $cnpj[$i] * $j;
+            $val = ord($cnpj[$i]) - 48; 
+            $sum += $val * $j;
             $j = ($j == 2) ? 9 : $j - 1;
         }
 
