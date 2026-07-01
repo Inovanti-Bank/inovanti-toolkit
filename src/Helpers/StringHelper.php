@@ -65,6 +65,13 @@ class StringHelper
         return preg_replace('/\D/', '', $text);
     }
 
+    public function onlyAlphanumeric(string $text, bool $toUpperCase = false): string
+    {
+        $cleaned = preg_replace('/[^a-zA-Z0-9]/', '', $text);
+
+        return $toUpperCase ? strtoupper($cleaned) : $cleaned;
+    }
+
     public function isPalindrome(string $text): bool
     {
         $cleanedText = preg_replace('/[^a-zA-Z0-9]/', '', mb_strtolower($text, 'UTF-8'));
